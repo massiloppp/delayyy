@@ -183,8 +183,6 @@ DelayEditor::DelayEditor (DelayAudioProcessor& p)
       lSyncWatch (*p.apvts.getParameter (IDs::lSync), [this] (float) { updateVisibility(); }),
       rSyncWatch (*p.apvts.getParameter (IDs::rSync), [this] (float) { updateVisibility(); })
 {
-    setSize (742, 376);
-
     lSync = add<ToggleBtn> (P (IDs::lSync), "Sync");  rSync = add<ToggleBtn> (P (IDs::rSync), "Sync");
     for (int i = 0; i < 8; ++i)
     {
@@ -219,7 +217,7 @@ DelayEditor::DelayEditor (DelayAudioProcessor& p)
         proc.apvts.addParameterListener (id, this);
 
     lSyncWatch.sendInitialUpdate(); rSyncWatch.sendInitialUpdate();
-    resized();
+    setSize (742, 376);   // after all children exist, so resized() never sees null pointers
 }
 
 DelayEditor::~DelayEditor()
