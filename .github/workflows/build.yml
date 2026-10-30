@@ -7,6 +7,13 @@ jobs:
       - uses: actions/checkout@v4
       - run: cmake -B build -A x64
       - run: cmake --build build --config Release --target ClassicDelay_VST3
+      - name: Validate plugin
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          Invoke-WebRequest https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_Windows.zip -OutFile pv.zip
+          Expand-Archive pv.zip -DestinationPath pv
+          ./pv/pluginval.exe --strictness-level 5 --validate-in-process "build/ClassicDelay_artefacts/Release/VST3/Classic Delay.vst3"
       - uses: actions/upload-artifact@v4
         with:
           name: ClassicDelay-VST3-Windows
